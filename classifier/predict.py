@@ -5,6 +5,6 @@ def load_model(checkpoint):
 
 
 def classify_influencer(profile, checkpoint):
-    is_influencer = 0
+    classes = 0
     profile_insights = 0
-    return is_influencer, profile_insights
+    return classes, profile_insights

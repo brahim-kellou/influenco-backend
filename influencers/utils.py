@@ -4,26 +4,39 @@ import json
 INSTAGRAM_URL = "https://www.instagram.com"
 
 
-def calc_engagement(user):
+def calc_insights(user):
+    total_comments = 0
+    total_likes = 0
     total_interactions = 0
+    count_comments = 0
+    count_likes = 0
+
     followers = user["edge_followed_by"]["count"]
     posts = user["edge_owner_to_timeline_media"]["edges"]
-    post_start = 1
-    post_end = 11
+    
+    post_start = 3
+    post_end = len(posts) - 2
+
     for i in range(post_start, post_end):
         post = posts[i]["node"]
         count_comments = post["edge_media_to_comment"]["count"]
         count_likes = post["edge_liked_by"]["count"]
+        total_comments += count_comments
+        total_likes += count_likes
         total_interactions = total_interactions + count_comments + count_likes
+
+    avg_comments = total_comments / (post_end - post_start)
+    avg_likes = total_likes / (post_end - post_start)
     avg_likes_cmt = total_interactions / (post_end - post_start)
     engagement = avg_likes_cmt/followers*100
 
-    return engagement
+    return (avg_comments, avg_likes, engagement)
+
 
 
 def construct_user(user):
     profile_pic_url = user["profile_pic_url_hd"].replace("\u0026", "&")
-    engagement = calc_engagement(user)
+    (avg_comments, avg_likes, engagement) = calc_insights(user)
 
     new_user = {
         "id": user["id"],
@@ -38,6 +51,8 @@ def construct_user(user):
         "followers": user["edge_followed_by"]["count"],
         "following": user["edge_follow"]["count"],
         "posts": user["edge_owner_to_timeline_media"]["count"],
+        "avg_comments": avg_comments,
+        "avg_likes": avg_likes,
         "engagement": engagement,
     }
 

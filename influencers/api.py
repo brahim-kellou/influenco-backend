@@ -2,10 +2,11 @@ import json
 
 from django.http import HttpResponse
 from rest_framework import viewsets, permissions, views
-from .serializers import InfluencerSerializer
+from .serializers import InstagramUserSerializer
 from rest_framework.response import Response
+from rest_framework import filters
 
-from influencers.models import Influencer
+from influencers.models import InstagramUser
 from influencers.utils import get_user
 
 
@@ -15,10 +16,12 @@ class InfluencerViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
 
-    queryset = Influencer.objects.all()
+    queryset = InstagramUser.objects.all()
 
-    serializer_class = InfluencerSerializer
+    serializer_class = InstagramUserSerializer
 
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['followers', 'engagement']
 
 def getProfileInsights(request, username):
     user = get_user(username)

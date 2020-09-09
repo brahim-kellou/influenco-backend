@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from .models import Influencer
+from .models import InstagramUser
 
-admin.site.register(Influencer)
+admin.site.register(InstagramUser)
