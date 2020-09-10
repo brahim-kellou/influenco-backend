@@ -35,6 +35,18 @@ class InstagramUser(models.Model):
   following = models.IntegerField()
   posts = models.IntegerField()
   engagement = models.FloatField()
+
+  CLASS_INFLUENCE = [
+    ('simple-user', 'simple-user'),
+    ('micro-influencer', 'micro-influencer'),
+    ('influencer', 'influencer'),
+  ]
+  class_influence = models.CharField(
+    max_length=48,
+    choices=CLASS_INFLUENCE,
+    null=True
+  )
+
   user_status = models.ArrayField(
     model_container = InstagramUserStatus,
     model_form_class = InstagramUserStatusForm,
