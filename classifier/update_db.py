@@ -1,40 +1,47 @@
 from pymongo import MongoClient
-import requests
+# import requests
 import simplejson as json
+import datetime
+from random import randint
+from django.utils.text import slugify
 
 # Connecting to MongoDB
 MONGO_HOST = 'mongodb://localhost:27017'
 mongo_client = MongoClient(MONGO_HOST)
 db = mongo_client["social_media_db"]
+db_influencers = db.influencers_instagramuser
 
 instagram_url = "https://www.instagram.com"
 
 if __name__ == "__main__":
-    
-    # cursor = db.influencers_instagramuser.find({})
-    # for document in cursor:
-        
-    #     # else:
-    #     #     print("username: ", document["username"], " , engagement: ", document["engagement"])
-    #     #     db.influencers_instagramuser.update_one({"_id": document["_id"]}, {"$set": {"class": "user"}})
-    #     # db.influencers_instagramuser.update_one({"_id": document["_id"]}, {"$set": {"followers": document['user_status'][-1]['followers']}})
-    #     # db.influencers_instagramuser.update_one({"_id": document["_id"]}, {"$set": {"following": document['user_status'][-1]['following']}})
-    #     # db.influencers_instagramuser.update_one({"_id": document["_id"]}, {"$set": {"posts": document['user_status'][-1]['posts']}})
-    #     # db.influencers_instagramuser.update_one({"_id": document["_id"]}, {"$set": {"engagement": document['user_status'][-1]['engagement']}})
-    #     # print(document['username'])
+    print(slugify("Brahim Kellou"))
+    cursor = db_influencers.find({})
+    minutes_cpt = 0
+    days_cpt = 8
+    for doc in cursor:
+        if doc['business_category_name'] == "none": 
+            db_influencers.update_one({"_id": doc['_id']}, {"$set": {"business_category_name": None}})
+        # if len(doc['user_status']) < 9:
+        #     print(doc)
+        #     minutes_cpt += 1
+        #     minutes_cpt = minutes_cpt % 60
+        #     user_status = doc['user_status']
+        #     new_user_status = {}
 
-    cursor = db.influencers_instagrampost.find({})
-    for document in cursor:
-        try:
-            if document["class_influence"] == "micro-influencer":
-                username = document["username"]
-                url = instagram_url + "/" + username + "/?__a=1"
-                print(username)
-                response = requests.get(url)
-                response_json = json.loads(response.text)
-                user_json = response_json["graphql"]["user"]
-                profile_pic_url = user_json["profile_pic_url_hd"].replace("\u0026", "&")
-                db.influencers_instagramuser.update_one({"_id": document["_id"]}, {"$set": {"profile_pic_url": profile_pic_url}})
-                print("done")
-        except:
-            pass
+        #     followers = user_status[-1]['followers']
+        #     following = user_status[-1]['following']
+        #     posts = user_status[-1]['posts']
+        #     engagement = user_status[-1]['engagement']
+        #     date = user_status[-1]['date']
+
+        #     new_user_status['version'] = 9
+        #     new_user_status['followers'] = int(followers*(1 + engagement/1500 )) + randint(-int(followers*(engagement/2000 )), int(followers*(engagement/2000 )))
+        #     new_user_status['following'] = following + randint(0, 10)
+        #     new_user_status['posts'] = int(user_status[-1]['posts']*(1 + 0.5/100))
+        #     new_user_status['engagement'] = engagement*(1 + randint(-20, 15) / 100)
+        #     new_user_status['date'] = date + datetime.timedelta(days=days_cpt, minutes=minutes_cpt, seconds=randint(0, 60))
+        #     new_user_status['predicted'] = True
+
+        #     user_status.append(new_user_status)
+        #     db_influencers.update_one({"_id": doc['_id']}, {"$set": {"user_status": user_status}})
+            

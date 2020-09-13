@@ -22,10 +22,14 @@ class InfluencerViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = {
+        'platforme': ['exact'],
+        'username': ['exact', 'icontains'],
         'class_influence': ['exact'],
-        'business_category_name': ['exact', 'contains'], 
+        'business_category_name': ['exact', 'icontains'], 
         'followers': ['exact', 'gte', 'lte'],
         'posts': ['exact', 'gte', 'lte'], 
+        'average_likes': ['exact', 'gte', 'lte'],
+        'average_comments': ['exact', 'gte', 'lte'],
     }
     ordering_fields = ['followers', 'engagement']
 

@@ -10,6 +10,7 @@ class InstagramUserStatus(models.Model):
   posts = models.IntegerField()
   engagement = models.FloatField()
   date = models.DateTimeField()
+  predicted = models.BooleanField(default=False)
 
   class Meta:
     abstract = True
@@ -35,6 +36,9 @@ class InstagramUser(models.Model):
   following = models.IntegerField()
   posts = models.IntegerField()
   engagement = models.FloatField()
+  average_likes = models.IntegerField()
+  average_comments = models.IntegerField()
+  platforme = models.CharField(max_length=256, null=True)
 
   CLASS_INFLUENCE = [
     ('simple-user', 'simple-user'),
